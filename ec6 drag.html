@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		#cc{
+			width: 220px;
+			height: 220px;
+			background: lightblue;
+			position: absolute;
+			top:0;
+			left: 0;
+		}
+		.bb{
+			width: 700px;
+			height: 500px;
+			border: 1px solid #0000FF;
+			position: relative;
+		}
+	</style>
+	<body>
+		<div class="bb">
+			<div id="cc">
+				
+			</div>
+		</div>
+	</body>
+	<script>
+		class Drag{
+			constructor(obj,father){
+				this.obj=obj;
+				this.father=father||document;
+				if(this.father.nodeType===9){
+					this.fw=document.documentElement.clientWidth;
+					this.fh=document.documentElement.clientHeight;
+				}else{
+					this.fw=this.father.clientWidth;
+					this.fh=this.father.clientHeight;
+				}
+				this.ow=obj.offsetWidth;
+				this.oh=obj.offsetHeight;
+				this.ox=0;
+				this.oy=0;
+				this.cx=0;
+				this.cy=0;
+				this.cx=0;
+				
+				this.startx=0;
+				this.starty=0;
+				this.endy=0;
+			    this.endx=0;
+			    this.lenx=0;
+			    this.leny=0;
+				this.xishu=0.8;
+			}
+			drag(){
+				this.down();
+			}
+			down(){
+				var that=this;
+				this.obj.onmousedown=function(e){
+					var eve=e||window.event;
+					that.ox=eve.offsetX;
+					that.oy=eve.offsetY;
+					that.move();
+					that.up();
+					that.startx=that.ox;
+            		that.starty=that.oy;	
+				}
+			}
+			move(){
+				var that=this;
+		        document.onmousemove=function(e){          
+		            var eve=e||window.event;
+		        	that.cx=eve.clientX;
+		        	that.cy=eve.clientY;
+		        	var x=that.cx-that.ox;
+		        	var y=that.cy-that.oy;
+		        	console.log(that.father.nodeType)
+		            //判断边界
+		        	if(x<=0){x=0};
+		        	if(y<=0){y=0};
+		        	if(x>=that.fw-that.ow){x=that.fw-that.ow};
+		        	if(y>=that.fh-that.oh){y=that.fh-that.oh}; 
+		        	that.obj.style.left=x+"px";
+		        	that.obj.style.top=y+"px";	
+		        	
+		        	that.endx=x;
+		        	that.endy=y; 
+		        	that.lenx=that.endx-that.startx
+		        	that.leny=that.endy-that.starty; 
+		        	that.startx=that.endx;
+		        	that.starty=that.endy;
+		         }
+			}
+			up(){
+				var that=this;
+		        document.onmouseup=function(){
+		         	document.onmousemove=null;
+		         	document.onmouseup=null;
+
+		     	  	var t=setInterval(function(){
+		            that.lenx*=that.xishu;
+		            that.leny*=that.xishu;
+		            if(Math.abs(that.lenx)>=Math.abs(that.leny)){
+		           		if(Math.abs(that.lenx)<1){
+		           			clearInterval(t);
+		           		}
+		            }
+		            else if(Math.abs(that.lenx)<Math.abs(that.leny)){
+		                if(Math.abs(that.leny)<1){
+		                 	clearInterval(t)
+		                }
+		            }
+		            var x=that.lenx+that.obj.offsetLeft;
+		            var y=that.leny+that.obj.offsetTop;
+		            if(x<=0){x=0};
+		    	    if(y<=0){y=0};
+		    	    if(x>=that.fw-that.ow){x=that.fw-that.ow};
+		    	    if(y>=that.fh-that.oh){y=that.fh-that.oh}; 
+		            that.obj.style.left=x+"px";
+		    	    that.obj.style.top=y+"px";
+		     		},100)
+		        }
+			}
+		}
+		var big=document.getElementsByClassName('bb')[0]
+		var hezi=document.getElementById("cc");
+		new Drag(hezi,big).drag();
+		
+		
+		
+		/*
+		 边界控制  	动画控制	方向控制
+		 * 
+		 * */
+	</script>
+</html>
