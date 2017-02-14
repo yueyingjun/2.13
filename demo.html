@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>拖拽</title>
+	<script src="jquery.min.js"></script>
+	<style>
+	*{
+		margin:0;
+		padding:0;
+	}
+		div{
+			width: 200px;
+			height: 200px;
+			background: #0ff;
+			text-align: center;
+			line-height: 180px;
+			color: #000;
+			font-size: 40px;
+		}
+	</style>
+</head>
+<body>
+	<div>我是盒子</div>
+</body>
+<script>
+	class newobj{
+		constructor (){
+			this.obj=obj;
+			this.cw=document.documentElement.clientWidth;
+			// console.log(this.cw)//浏览器的宽
+			this.ch=document.documentElement.clientHeight;
+			// console.log(this.ch)//浏览器的高
+			// 获取自身的宽高
+			this.ow=obj.width();
+			// console.log(this.ow)
+			this.oh=obj.height();
+			// console.log(this.oh)	
+			// 事件到事件源的距离
+			this.ox=0;
+			this.oy=0;
+			// 事件到浏览器的距离
+			this.cx=0;
+			this.cy=0;
+			// obj的
+			this.left=0;
+			this.top=0;
+		}
+		drag(){
+			this.down();
+			// console.log(obj)
+		}
+		down(){
+			var that=this;   
+			this.obj.onmousedown=function(e){
+				var ev=e||window.event;
+				that.ox=ev.offsetX;
+				that.oy=ev.offsetY;
+				that.move();
+				that.up();
+			}
+		}
+		move(){
+			var that=this;
+			document.onmousemove=function(e){
+				var ev=e||window.event;
+				that.cx=ev.clientX;
+				that.cy=ev.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.oy;
+				if(that.left<=0){
+					that.left=0;
+				}
+				if(that.top<=0){
+					that.top=0;
+				}
+				if(that.left>=that.cw-that.ow){
+					that.left=that.cw-that.ow;
+				}
+				if(that.top>=that.ch-that.oh){
+					that.top=that.ch-that.oh;
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+			}
+		}
+		up(){
+			this.obj.onmouseup=function(e){
+				document.onmousemove=null;
+				this.obj.onmouseup=null;
+			}
+		}
+	}
+	var obj=$("div");
+	new newobj().drag();
+</script>
+</html>
