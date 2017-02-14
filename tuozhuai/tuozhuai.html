@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<script src="function.js"></script>
+<script>
+  $(function(){
+    // 先创建一个边界
+    class Drag{
+      constructor(obj,m,n){
+        this.obj=obj;
+        this.m=m;
+        this.n=n;
+        this.cw=document.documentElement.clientWidth;
+        //获取浏览器的宽、高
+        this.ch=document.documentElement.clientHeight;
+        this.ow=this.obj.offsetWidth;//获取拖拽对象的实际宽高
+        this.oh=this.obj.offsetHeight;
+        this.cx=0;
+        this.cy=0;//这里只是声明一个变量，到后面进行赋值
+        this.ox=0;
+        this.oy=0;
+        this.left=0;//是拖拽对象的left值
+        this.top=0;
+      }
+      drag(){
+        this.draw();
+        this.down();
+      }
+      draw(){
+        this.obj.style.width=this.m+"px";
+        this.obj.style.height=this.n+"px";
+        document.body.appendChild(this.obj);
+        
+      }
+      down(){
+        var that;
+        that=this;
+        this.obj.onmousedown=function(e){
+          // this指向this.obj，所以要that=this;相当于赋值
+          var ev=e||window.event;//保存在事件对象上
+          that.ox=ev.offsetX;
+          that.oy=ev.offsetY;
+          that.move();//在down执行完之后，调用newobj的move和up方法
+          that.up();
+        }
+      }
+
+      move(){
+        var that;
+        that=this;
+        document.onmousemove=function(e){
+          // 指针指向document，所以要改变指针的方向
+          var ev=e||window.event;
+          that.cx=ev.clientX;
+          that.cy=ev.clientY;
+          that.left=that.cx-that.ox;
+          that.top=that.cy-that.oy;
+          //加边疆
+          if(that.top<=0){
+            that.top=0;
+          };
+          if(that.left<=0){
+            that.left=0;
+          };
+          if(that.left>=that.cw-that.ow){
+            that.left=that.cw-that.ow;
+          }
+          if(that.top>=that.ch-that.oh){
+            that.top=that.ch-that.oh;
+          }
+          that.obj.style.left=that.left+"px";//是拖拽对象的left值 这样它擦爱能动起来
+          that.obj.style.top=that.top+"px";
+        }
+      }
+
+      up(){
+        document.onmouseup=function(){
+          //清空函数
+          this.onmousedown=null;
+          this.onmousemove=null;
+        }
+        
+      } 
+
+
+    }
+    
+
+
+    // class stu extends person{
+    //     constructor(){
+    //         super(); 改变this指针    
+    //     }
+    //     abc(){
+    //         console.log("abc");    
+    //     }
+    // }
+
+    var box=$(".box")[0];
+    new Drag(box,500,500).drag();
+
+  })
+</script>
+<style>
+	*{
+    margin:0;
+    padding: 0;
+    list-style: none;
+  }
+  .box{
+    width: 400px;
+    height: 400px;
+    border:1px solid red;
+    margin: 0 auto;
+    position: relative;
+  }
+	.inner{
+		width:100px;
+		height:100px;
+		background:green;
+    position:absolute;
+    top:0;
+    left:0;
+	}
+	</style>
+<body>
+	<!-- 边界控制 -->
+	<!-- 方向控制 -->
+	<!-- 动画控制 -->
+	<div class="box">
+		<div class="inner"></div>
+	</div>
+</body>
+</html>
