@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="jquery.min.js"></script>
+	</head>
+	<style>
+		#box{
+			width: 600px;
+			height: 600px;
+			background: red;
+			position: relative;
+			left: 0;
+			top: 0;
+		}
+	</style>
+	<body>
+		<div id="box">
+			
+		</div>
+	</body>
+	<script>
+		var box=document.getElementById("box");	
+		class boxmove{
+			constructor(obj,height,width){
+				this.obj=obj;
+				this.ch=height||$(window).height();
+				this.cw=width||$(window).width();
+				this.oh=$(this.obj).height();
+				this.ow=$(this.obj).width();
+//				this.ox,this.oy,this.left,this.top;
+
+			}
+			open(){
+				this.down();
+			}
+			down(){
+				var that=this;
+				this.obj.onmousedown=function(e){
+					that.ox=e.offsetX;
+					that.oy=e.offsetY;
+					that.move();
+					that.up();
+				}
+			}
+			move(){
+				var that=this;
+				document.onmousemove=function(e){
+					//换成document用意
+					that.cx=e.clientX;
+					that.cy=e.clientY;
+					that.left=that.cx-that.ox;
+					that.top=that.cy-that.oy;
+					if(that.top>=that.ch-that.oh){
+						that.top=that.ch-that.oh;
+						
+					}
+					if(that.left>=that.cw-that.ow){
+						that.left=that.cw-that.ow;
+					}
+					if(that.top<=0){
+						that.top=0;
+					}
+					if(that.left<=0){
+						that.left=0;
+					}
+					$(that.obj).animate({left:that.left+"px",top:that.top+"px"},2);
+					//动画效果不理想
+				}
+			}
+			up(){
+				document.onmouseup=function(e){
+					document.onmousemove=null;
+					document.onmouseup=null;
+				}
+			}
+		}
+		var tuobox=new boxmove(box);
+		//边界如何控制
+		tuobox.open();
+		
+	</script>
+</html>
