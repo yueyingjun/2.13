@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src=function.js></script>
+	<script src=animate.js></script>
+</head>
+	<script>
+
+	$(function(){
+		var box=$(".box")[0];
+		function Drag(obj){
+			this.obj=obj;
+		}
+		Drag.prototype={
+			//因为drag.prototype，是个对象，所以可以有json的这种方法，最后一个不加逗号
+			drag:function(){
+				this.down();//这里必须的家this这个对象来调用down()这个方法
+			},
+			//属性后面跟的值是函数就说是方法，所以上面是this.down();
+			down:function(){
+				//这里的this值得是实例化出的对象，newobj，因为这是一个方法，是newobj来调用的
+				var that=this;
+				this.obj.onmousedown=function(e){
+					var ev=e||window.event;
+					that.ox=ev.offsetX;
+					that.oy=ev.offsetY;
+					that.move();
+				}
+			},
+			move:function(){
+				var that=this;
+				document.onmousemove=function(e){
+					var ev=e||window.event;
+					if(ev.returnValue){
+						ev.returnValue=false;  //ie
+					}else{
+						ev.preventDefault()   //翻译为预防默认值
+					}
+					//上面这句话的意思是消除单机拖动会选中文字
+					that.cx=ev.clientX;
+					that.cy=ev.clientY;
+					that.left=that.cx-that.ox;
+					that.top=that.cy-that.oy;
+					if(that.left<=0){
+						that.left=0;
+					}
+					if(that.top<=0){
+						that.top=0;
+					}
+					if(that.left>=that.cw-that.ow){
+						that.left=that.cw-that.ow;
+					}
+					if(that.top>=that.ch-that.oh){
+						that.top=that.ch-that.oh;
+					}
+					that.obj.style.left=that.left+"px";
+					that.obj.style.top=that.top+"px";
+					that.up()
+				}
+			},
+			up:function(){
+				document.onmouseup=function(){
+					document.onmousemove=null;
+					document.onmouseup=null;
+				}
+			}
+		}
+		var newobj=new Drag(box);		
+		newobj.drag();
+	})
+	
+		
+	</script>
+<body>
+	<style>
+		*{
+			margin: 0;
+			padding:0;
+		}
+		.box{
+			width: 200px;
+			height:200px;
+			position: fixed;
+			left:0;
+			top:0;
+			background: red;
+		}
+	</style>
+	<div class="box">sjlfjsjfsjflsdjfldsfdsfsdfsdfsdf</div>
+</body>
+</html>
