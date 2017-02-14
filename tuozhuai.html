@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.box{
+			width: 200px;
+			height: 200px;
+			background-color: red;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+		}
+	</style>
+</head>
+<body>
+	<div class="box"></div>
+</body>
+<script src="functionxin.js"></script>
+<script>
+window.onload=function(){
+	class zhuai{
+		constructor(obj){
+			this.obj=obj;
+			this.cw=document.documentElement.clientWidth;
+			this.ch=document.documentElement.clientHeight;
+			this.ow=this.obj.offsetWidth;
+			this.oh=this.obj.offsetHeight;
+		}
+		drug(){
+			this.down();
+		}
+		down(){
+			var that=this;
+			this.obj.onmousedown=function(e){   
+			var ev=e||window.event;
+			that.ox=ev.offsetX;
+			that.oy=ev.offsetY;
+			that.move();
+			that.up();
+		}
+	}
+		move(){
+			var that=this;
+			document.onmousemove=function(e){
+				var ev=e||window.event;
+				that.cx=ev.clientX;
+				that.cy=ev.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.oy;
+				if(that.left<=0){
+					that.left=0;
+				}
+				if(that.top<=0){
+					that.top=0;
+				}
+				if(that.left>=that.cw-that.ow){
+					that.left=that.cw-that.ow;
+				}
+				if(that.top>=that.ch-that.oh){
+					that.top=that.ch-that.oh;
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+				}
+		}
+		up(){
+			var that=this;
+			this.obj.onmouseup=function(){
+			document.onmousemove=null;
+			that.obj.onmouseup=null;	
+			}
+		}
+	}	
+		var box=$(".box")[0];
+		var newobj=new zhuai(box);
+		newobj.drug(); 
+}
+</script>
+</html>
