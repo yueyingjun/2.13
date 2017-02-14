@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象的拖拽</title>
+	<script src="function.js"></script>
+</head>
+<style>
+	*{
+		padding:0;
+		margin:0;
+		list-style: none;
+	}
+	#box{
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: fixed;
+		left:0;
+		top:0;
+	}
+</style>
+<body>
+	<div id="box"></div>
+</body>
+<script>
+	class Drag{
+		constructor(obj){
+			this.obj=obj;
+			this.cw=document.documentElement.clientWidth;
+			this.ch=document.documentElement.clientHeight;
+			this.ow=this.obj.offsetWidth;
+			this.oh=this.obj.offsetHeight;
+			this.ox=0;
+			this.oy=0;
+			this.cx=0;
+			this.cy=0;
+			this.left=0;
+			this.top=0;
+			console.log(this.ow,this.oh);
+		}
+		drag(){
+			this.down();
+		}
+		down(){
+			var that=this;
+			document.onmousedown=function(e){
+				var ev=e||window.event;
+				if(ev.returnValue){
+					ev.returnValue=false;
+				}else{
+					ev.preventDfault();
+				}
+				that.ox=ev.offsetX;
+				that.oy=ev.offsetY;
+				that.move();
+				that.up();
+			}
+		}
+		move(){
+			var that=this;
+			document.onmousemove=function(e){
+				var ev=e||window.event;
+				that.cx=ev.clientX;
+				that.cy=ev.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.oy;
+				if(that.left<=0){
+					that.left=0;
+				}
+				if(that.top<=0){
+					that.top=0;
+				}
+				if(that.left>=that.cw-that.ow){
+					that.left=that.cw-that.ow;
+				}
+				if(that.top>=that.ch-that.oh){
+					that.top=that.ch-that.oh
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+			}
+		}
+		up(){
+			document.onmouseup=function(){
+				document.onmousemove=null;
+				document.onmouseup=null;
+			}
+		}
+	}
+	window.onresize=function(){
+		cw=document.documentElement.clientWidth;
+		ch=document.documentElement.clientHeight;
+	}
+	var obj=document.getElementById('box');
+	console.log(obj)
+	var newobj=new Drag(obj);
+	newobj.drag()	
+
+
+
+function person(){
+
+}
+person.prototype={
+
+}
+function stu(){
+
+}
+stu.prototype=new person();
+stu.prototype.name="stu的原型的name";
+console.log(new stu().name)
+
+var zhangsan={name:"zhangsan",age:12,sex:"man",son:{name:"xiaozhangsan"}};
+console.log(zhangsan.son.name);
+var lisi=copy(zhangsan);
+console.log(lisi);
+lisi.son.name="xiaolisi";
+console.log(zhangsan.son.name);
+function copy(json){
+	var newobj={};
+	for(var i in json){
+		if(typeof json[i]=="object"){
+			newobj[i]==copy(json[i])
+		}else{
+			newobj[i]=json[i];
+		}
+	}
+	return newobj;
+}
+
+</script>
+</html>
