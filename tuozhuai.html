@@ -14,6 +14,10 @@
 			width: 200px;
 			height: 200px;
 			background: yellowgreen;
+			position: absolute;
+			left: 0;
+			top: 0;
+			
 		}
 	</style>
 	<script>
@@ -32,8 +36,8 @@
 					this.oy=0;
 				}
 				drags(){
-					resize();
-					down();
+					this.resize();
+					this.down();
 				}
 				down(){
 					var that=this;
@@ -47,10 +51,10 @@
 				}
 				move(){
 					var that=this;
-					document.onmousemove=function(){
-						var e=e||window.event;
-						that.cx=e.clientX;
-						that.cy=e.clientY;
+					document.onmousemove=function(e){
+						var ev=e||window.event;
+						that.cx=ev.clientX;
+						that.cy=ev.clientY;
 						var x=that.cx-that.ox;
 						var y=that.cy-that.oy;
 						var w=that.cw-that.ow;
@@ -97,7 +101,8 @@
 				}
 				
 			}
-			new drag(box).drags();
+			var aa=new drag(box);
+			aa.drags();
 			
 		}
 	</script>
