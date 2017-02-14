@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>对象 鼠标拖拽</title>
+	<script src="function.js"></script>
+    <script src="animate.js"></script>
+    <script src="drag.js"></script>
+</head>
+<style>
+    *{
+    	margin:0;
+    	padding:0;
+    }
+	.father{
+		width: 200px;
+		height: 200px;
+		border:1px solid yellow;
+		margin:100px;
+		position: relative;
+	}
+	.son{
+		width: 50px;
+		height: 50px;
+		background: blue;
+		position: absolute;
+		color: #fff;
+		line-height: 50px;
+		text-align: center;
+	}
+</style>
+<body>
+	<div class="father">
+		<div class="son">拖拽框</div>
+	</div>
+</body>
+<script>
+window.onload=function(){
+	var father=document.getElementsByClassName("father")[0];
+	var son=document.getElementsByClassName("son")[0];
+	document.onmousedown=function(e){
+		var ev=e||window.event;
+		if(ev.preventDefault){       // 阻止浏览器的默认行为
+	   		ev.preventDefault();
+	   	}else{
+	   		ev.returnValue=false;
+	   	}
+		var ox=son.offsetLeft;
+		var oy=son.offsetTop;
+		var ow=ev.clientX;
+		var oh=ev.clientY;
+		var endx=ow-ox;
+		var endy=oh-oy;
+		document.onmousemove=function(e){
+			var ev=e||window.event;
+			var ev=e||window.event;
+			if(ev.preventDefault){       // 阻止浏览器的默认行为
+		   		ev.preventDefault();
+		   	}else{
+		   		ev.returnValue=false;
+		   	}
+			var cx=ev.clientX;
+			var cy=ev.clientY;
+			son.style.left=cx-endx+"px";
+			son.style.top=cy-endy+"px";
+
+		}
+		document.onmouseup=function(){
+			document.onmousemove=null;
+			document.onmousemove=null;
+		}
+	}
+}
+</script>
+</html>
