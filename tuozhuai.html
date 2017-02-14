@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+
+#box{
+	width: 250px;
+	height: 250px;
+    background-color: red;
+	position: fixed;
+	top: 0;
+	left: 0;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="box"></div>
+	</body>
+	<script>
+	document.addEventListener("DOMcontentloaded",function(){
+//		var div=document.getElementByTagName("div");
+          var divs=document.querySelectorAll("div");
+          divs=Array.prototype.slice.call("div");
+		console.log(divs);
+	
+	})
+//		window.onload=function(){	
+//			class Drag{
+//				constructor (obj,cw,ch,direction){
+//					this.direction=direction||{};
+//					this.obj=obj;
+//					this.cw=cw||document.documentElement.clientWidth;	
+//					this.ch=ch||document.documentElement.clientHeight;
+//					this.ow=this.obj.offsetWidth;
+//					this.oh=this.obj.offsetHeight;
+//					this.ox=0;
+//					this.oy=0;
+//					this.cx=0;
+//					this.cy=0;
+//					this.left=0;
+//					this.top=0;
+//					this.starx=0;
+//					this.stary=0;
+//					this.endx=0;
+//					this.endy=0;
+//					this.lenx=0;
+//					this.leny=0;
+//					this.x=this.direction.x==undefined?true:this.direction.x;
+//					this.y=this.direction.y==undefined?true:this.direction.y;
+//				}
+//				drag(){
+//					this.down();
+//				}
+//				down(){
+//					var that =this;
+//					this.obj.onmousedown=function(e){
+//						var eve=e||window.event;
+//						if(eve.returnValue){
+//							e.returnValue=false;
+//						}else{
+//							e.preventDefault();
+//						}
+//						that.ox=eve.offsetX;
+//						that.oy=eve.offsetY;
+//						that.starx=that.ox;
+//						that.stary=that.oy;
+//						that.move();
+//						that.up();
+//					}
+//				
+//				}
+//				move(){
+//					var that=this;
+//					document.onmousemove=function(e){	
+//						var eve=e||window.event;
+//						that.cx=eve.clientX;
+//						that.cy=eve.clientY;
+//
+//						that.left=that.cx-that.ox;
+//
+//						that.top=that.cy-that.oy;
+//						that.endx=that.left;
+//						that.endy=that.top;
+//						that.lenx=that.endx-that.starx;
+//						that.leny=that.endy-that.stary;
+//
+//						that.starx=that.endx;
+//						that.stary=that.endy;
+//						
+//						if(that.left<=0){
+//							that.left=0;
+//						}
+//						if(that.top<=0){
+//							that.top=0;
+//						}
+//						if(that.left>=that.cw-that.ow){
+//							that.left=that.cw-that.ow
+//						}
+//						if(that.top>=that.ch-that.oh){
+//							that.top=that.ch-that.oh
+//						}
+//						if(that.x){
+//							that.obj.style.left=that.left+"px";
+//						}if(that.y){
+//							that.obj.style.top=that.top+"px";
+//						}	
+//					}
+//				}
+//				up(){
+//					var that=this
+//					document.onmouseup=function(){
+//						var coefficient=0.8;
+//						var t=setInterval(function(){
+//							that.lenx*=coefficient;
+//							that.leny*=coefficient;
+//							if(Math.abs(that.lenx)>=Math.abs(that.leny)){
+//								if(Math.abs(that.lenx)<=1){
+//									clearInterval(t);
+//								}
+//							}else{
+//								if(Math.abs(that.leny)<=1){
+//									clearInterval(t);
+//								}
+//							}
+//							that.left=that.lenx+that.obj.offsetLeft;
+//							that.top=that.leny+that.obj.offsetTop;
+//							if(that.left<=0){
+//								that.left=0;
+//							}
+//							if(that.top<=0){
+//								that.top=0;
+//							}
+//							if(that.left>=that.cw-that.ow){
+//								that.left=that.cw-that.ow
+//							}
+//							if(that.top>=that.ch-that.oh){
+//								that.top=that.ch-that.oh
+//							}
+//							that.obj.style.left=that.left+"px";
+//							that.obj.style.top=that.top+"px";
+//						},60)
+//						document.onmousemove=null;
+//						document.onmouseup=null;
+//					}
+//				}				
+//			}	
+//		var box=document.querySelector("#box");
+//		new Drag(box,{x:false}).drag();				
+//	}
