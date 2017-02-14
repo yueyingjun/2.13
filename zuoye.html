@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+	*{
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+		#box{
+			width: 200px;
+			height: 200px;
+			background: red;
+			position: absolute;
+			
+		}
+	</style>
+	<body>
+		<div id="box"></div>	
+	</body>
+	<script type="text/javascript">
+		
+			var box = document.getElementById("box");
+			
+			var cw=document.documentElement.clientWidth; //浏览器的宽度
+			var ch=document.documentElement.clientHeight;//浏览器的高度
+			var ow=box.offsetWidth;		// 时间源的宽度和高度
+			var oh=box.offsetHeight;
+//			box.onmousedown=function(e){
+//				var ev=e||window.event;
+//				var ox=ev.offsetX;     //鼠标在距离时间源左上角的距离
+//				var oy=ev.offsetY;
+//				document.onmousemove=function(e){
+//					var eve= e||window.event;
+//					var cx=eve.clientX;	//  鼠标距离窗口左上角的距离
+//					var cy=eve.clientY;
+//					var left=cx-ox;   // 事件源点击后 拖动   距离窗口左上的位置变化，事件源的固定的位置的变化！
+//					var top=cy-oy;
+//					if(left<=0){   //  使事件源不会超出窗口！
+//						left=0;
+//					}
+//					if(top<=0){
+//						top=0;
+//					}
+//					if(left>=cw-ow){
+//						left=cw-ow;
+//					}
+//					if(top>=ch-oh){
+//						top=ch-oh
+//					}
+//					box.style.left=left+"px";  // 赋值给事件源的left值和top值！
+//					box.style.top=top+"px";
+//				}
+//				document.onmouseup=function(){
+//					document.onmousemove=null; //  鼠标抬起时 停止鼠标移动，停止 抬起；
+//					document.onmouseup=null;
+//				}
+//				window.onresize=function(){
+//					cw=document.documentElement.clientWidth;  //  改变窗口大小的时候 重现获取窗口的大小！
+//					ch=document.documentElement.clientHeight;
+//				}
+//			}
+//		
+	function Drag(obj){
+	 	this.obj=obj;
+	 	this.cw=document.documentElement.clientWidth;
+	 	this.ch=document.documentElement.clientHeight;
+	 	this.ow=this.obj.offsetWidth;
+	 	this.oh=this.obj.offsetHeight;
+	 	this.ox=0;
+	 	this.cx=0;
+	 	this.oy=0;
+	 	this.cy=0;
+	 	this.left=0;
+	 	this.top=0;
+	}
+	Drag.prototype={
+		drag:function(){
+			this.down();
+		},
+		down:function(){
+			var that=this;
+			this.obj.onmousedown=function(e){
+				var ev=e||window.event;
+				that.ox=ev.offsetX;
+				that.oy=ev.offsetY;
+				that.move();
+				that.up();
+			}
+		},
+		move:function(){
+			var that=this;
+			document.onmousemove=function(e){
+				var ev=e||window.event;
+				that.cx=ev.clientX;
+				that.cy=ev.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.ox;
+				if(that.left<0){
+					that.left=0;
+				}
+				if(that.top<0){
+					that.top=0;
+				}
+				if(that.left>=that.cw-that.ow){
+					that.left=that.cw-that.ow;
+				}
+				if(that.top>=that.ch-that.oh){
+					that.top=that.ch-that.oh;
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+			}
+		},
+		up:function(){
+			document.onmouseup=function(){}
+			document.onmousemove=null;
+			document.onmouseup=null;
+		}
+	}
+	var move =new Drag(box);
+	move.drag()
+		
+
+	</script>
+</html>
