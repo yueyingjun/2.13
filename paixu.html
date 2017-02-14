@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script src="jquery.min.js"></script>
+
+
+
+<script type="text/javascript">
+//		var arr=[];
+//		for(let num=100;num<200;num++){
+//			if(num%3==1&&num%4==2&&num%5==3){
+//				arr.push(num);
+//			}
+//		}
+//		console.log(arr)
+// function aa(a,b){
+// 	 var hang=a||10;
+// 	 var lie=b||10;
+// 	 document.write("<table>");
+// 	 for(var i=0;i<hang;i++){
+// 	 	document.write("<tr>");  	 	
+// 	 	for(var j=i;j<lie;j++){
+//	   	 	document.write("<td>");
+//	   	 	document.write(j);
+//	   	 	document.write("</td>");  	 		
+// 	 	}
+//
+// 	 	document.write("</tr>"); 	 	
+// 	 }
+// 	 document.write("</table>");
+// 	 
+// }
+// aa(5,5);
+// aa(7,7);
+
+//  function aa(){
+//  	var num=10;
+//  	return function(){
+//  		console.log(num++);
+//  	}
+//  }
+//  var fn=aa();
+//  fn();
+//  fn();
+//  fn();
+//  fn();
+//  console.log(num);
+
+//
+////数组拷贝
+//var arr=[12,233,43,123,554,32,23];
+//function copy(arr){
+//	var newarr=[];
+//	for(var i in arr){		
+//	    newarr[i]=arr[i];
+//	}return newarr;
+//}
+////1、冒泡排序
+//var newarr=copy(arr);
+//function order(aa){
+//	for(var i=0;i<aa.length;i++){
+//		for(var j=i+1;j<aa.length;j++){
+//		  if(aa[i]>aa[j]){
+//		  	var num=aa[i];
+//		  	aa[i]=aa[j];
+//		  	aa[j]=num;
+//		  }
+//	    }
+//	} return aa;
+//}
+//order(newarr);
+////console.log(newarr);
+//
+////2、选择排序
+//var newarr1=copy(arr);
+//function xuan(aa){
+//  for(i=0;i<aa.length;i++){
+//      var	Min=i;
+//  	for(var j=i+1;j<arr.length;j++){
+//  	  if(arr[Min]>aa[j]){
+//  		 Min=j;
+//  	  }
+//  	}
+//  	var num=aa[Min];
+//  	aa[Min]=aa[i];
+//  	aa[i]=num;
+//  }return aa;   
+//}
+//xuan(newarr1);
+////console.log(newarr);
+//
+////3、插入排序
+//var newarr2=copy(arr);
+//function cha(aa){
+//	for(var i=1;i<aa.length;i++){
+//		var pre=i-1;
+//		var now=aa[i];
+//      while(pre>=0&&now<aa[pre]){
+//      	aa[pre+1]=aa[pre];
+//      	pre--;
+//      }
+//      aa[pre+1]=now;
+//	}
+//	return aa;
+//}
+//cha(newarr2);
+////console.log(newarr2);
+//
+////4、快速排序     数组排序(本质是冒泡排序)
+//var newarr4=copy(arr);
+//function sort(arr,callback){
+//	for(var i=0;i<arr.length;i++){
+//		for(var j=1;j<arr.length;j++){
+//			if(callback(arr[i],arr[j])){
+//				var temp=arr[i];
+//				arr[i]=arr[j];
+//				arr[j]=temp;			
+//			}
+//		}
+//	}return arr;
+//}
+//var res=newarr4.sort(function(m,n){return m-n});
+//console.log(res);
+
+		</script>
+		
+	<style>
+		div{
+			background: yellow; margin-top: 10px;
+			text-align: center; line-height: 30px;
+		}
+		div:nth-child(1){
+			width: 300px; height: 30px;
+		}
+		div:nth-child(2){
+			width: 100px; height: 30px;
+		}
+		div:nth-child(3){
+			width: 200px; height: 30px;
+		}
+		div:nth-child(4){
+			width: 50px; height: 30px;
+		}
+		div:nth-child(5){
+			width: 400px; height: 30px;
+		}
+	</style>	
+	
+	<body>
+				<div>1</div>
+				<div>2</div>
+				<div>3</div>
+				<div>4</div>
+				<div>5</div>
+	</body>
+	
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	function sort(arr,callback){
+		for(var i=0;i<arr.length;i++){
+			for(var j=1;j<arr.length;j++){
+				if(callback(arr[i],arr[j])){
+					var temp=arr[i];
+					arr[i]=arr[j];
+					arr[j]=temp;			
+				}
+			}
+		}return arr;
+	}
+	
+//	自己写的	
+//	var cun=[];
+//  var len=$("div").length;
+//  for(var i=0;i<len;i++){
+//  	cun.push($("div").eq(i).width());
+//  }    
+//	cun.sort(function(m,n){
+//		return m>n;
+//	});
+//	for(var j=0;j<cun.length;j++){
+//		for(var k=0;k<len;k++){
+//		 if(cun[j]==$("div").eq(k).width()){
+//			$("body").append($("div").eq(k))
+//		 }		
+//		} 	
+//  }
+//	console.log(cun)		
+
+//老师方法
+var arr=[];
+var divs=document.querySelectorAll("div");
+arr=Array.prototype.slice.call(divs);
+arr.sort(function(m,n){
+	return m.clientWidth-n.clientWidth;
+})
+console.log(arr);	
+arr.forEach(function(obj,index){
+	var width=obj.clientWidth;
+	var clone=obj.cloneNode(true);
+	clone.style.width=width+"px";
+	document.body.appendChild(clone);
+})	
+arr.forEach(function(obj,index){
+	 document.body.removeChild(obj);	
+})	
+		
+})	
+	</script>
+
+</html>
+
+
