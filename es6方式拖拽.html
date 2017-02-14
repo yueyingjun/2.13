@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>拖拽</title>
+  <script src="function.js"></script>
+</head>
+<style>
+   .box{
+   	width: 200px;
+   	height:200px;
+   	background: blue;
+    position: absolute;
+    top:0;
+    left:0;
+   }
+</style>
+<body>
+	<div class="box"></div>
+</body>
+</html>
+<script>
+   class tuozhai{
+        constructor(obj){
+         this.obj=obj;
+         this.obj=obj;                                       //将传入的obj存到this.obj
+         this.cw=document.documentElement.clientWidth;       
+         this.ch=document.documentElement.clientHeight;
+         this.ow=obj.offsetWidth; 
+         this.oh=obj.offsetHeight;
+         this.left=0;                                           //没有做任何操作，初始值为0
+         this.top=0;
+         this.cx=0;
+         this.cy=0;
+         this.ox=0;
+         this.oy=0;
+        }
+        drag(){                                     //首先调用按下，按下的过程中，实现移动，在实现抬起
+           this.down();
+       }
+      down(){                                   
+       var that=this;
+       this.obj.onmousedown=function(e){                
+        var ev=e||window.event;
+        if(ev.returnValue){                                //阻止浏览器的默认动作，拖拽时不会让文字被选中
+          ev.returnValue=true;
+        }else{
+          ev.preventDefault();
+        }
+        that.ox=ev.offsetX;                               //获取距离事件源的距离
+        that.oy=ev.offsetY;
+        that.move();                                      
+        that.up();
+       }
+    }
+   move(){                                     
+      var that=this;
+      document.onmousemove=function(e){             
+       var ev=e||window.event;
+       that.cx=ev.clientX;                
+       that.cy=ev.clientY;                         //获取一下距离浏览器的距离
+       that.left=that.cx-that.ox;                   
+       that.top=that.cy-that.oy;
+       if(that.left<=0){                           //判断边界
+        that.left=0;
+       }
+       if(that.top<=0){
+        that.top=0;
+       }
+       if(that.left>=that.cw-that.ow){
+        that.left=that.cw-that.ow;
+       }
+       if(that.top>=that.ch-that.oh){
+        that.top=that.ch-that.oh;
+       }
+       that.obj.style.left=that.left+"px";       //赋值
+       that.obj.style.top=that.top+"px";
+    }
+   }
+    up(){
+      document.onmouseup=function(){
+        document.onmousemove=null;
+        document.onmouseup=null;
+      }
+     }
+   }
+    var obj=$(".box")[0];
+    var newobj=new tuozhai(obj);               //实例化一个构造函数
+    newobj.drag();                            //通过调用这个实现拖拽
+   
+</script>
