@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>drag</title>
+	<script src="./function.js"></script>
+	
+</head>
+<style>
+	.box{
+		width:200px;
+		height:200px;
+		background: red;
+        position: absolute;
+        top:0;
+        left:0;
+	}
+</style>
+<body>
+	<div class="box"></div>
+</body>
+<script>
+ 
+ class drag{
+            constructor(obj){
+                this.obj=obj;
+                this.cw=document.documentElement.clientWidth;
+                this.ch=document.documentElement.clientHeight;
+                this.ow=this.obj.offsetWidth;
+                this.oh=this.obj.offsetHeight;
+                this.ox=0;
+                this.oy=0;
+                this.cx=0;
+                this.cy=0;
+                this.left=0;
+                this.top=0;
+            }
+        drag(){
+            this.down();
+        }
+        down(){
+            var that=this;
+            this.obj.onmousedown=function(e){
+                var eve=e||window.event;
+                that.ox=eve.offsetX;//鼠标按下去距离事件源左上角的横坐标的距离
+                that.oy=eve.offsetY;
+                that.move();
+                that.up();
+            }
+        }
+        move(){
+            var that=this;
+            document.onmousemove=function(e){
+                var eve=e||window.event;
+                that.cx=eve.clientX;//事件源距离浏览器左上角的横坐标的距离
+                that.cy=eve.clientY;
+                that.left=that.cx-that.ox;
+                that.top=that.cy-that.oy;
+                if(that.left<=0){
+                    that.left=0;
+                }
+                if(that.top<=0){
+                    that.top=0;
+                }
+                if(that.left>=that.cw-that.ow){
+                    that.left=that.cw-that.ow;
+                }
+                if(that.top>=that.ch-that.oh){
+                    that.top=that.ch-that.oh;
+                }
+                that.obj.style.left=that.left+"px";
+                that.obj.style.top=that.top+"px";
+
+            }
+        }
+        up(){
+            document.onmouseup=function(){
+                document.onmousemove=null;
+                document.onmouseup=null;
+            }
+
+        }
+        
+    }
+        var obj=$(".box")[0];
+        new drag(obj).drag();
+
+</script>
+</html>
