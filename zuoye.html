@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		div{
+			width:300px;
+			height:300px;
+			background:#FF0000;
+			position: absolute;
+			top:0;
+			left:0;
+		}
+	</style>
+	<body>
+		<div></div>
+	</body>
+	<script>
+		class drag{
+			constructor(obj){
+				this.obj=obj;
+				this.cw=document.documentElement.clientWidth;
+				this.ch=document.documentElement.clientHeight;
+				this.ow=this.obj.clientWidth;
+				this.oh=this.obj.clientHeight;
+				this.ox=0;
+				this.oy=0;
+				this.cx=0;
+				this.cy=0;
+				this.left=0;
+				this.top=0;
+			}
+		drag(){
+			this.down();
+		}
+		down(){
+			var that=this;
+			this.obj.onmousedown=function(e){
+				var eve=e||window.event;
+				that.ox=eve.offsetX;
+				that.oy=eve.offsetY;
+				that.move();
+				that.up();
+			}
+		}
+		move(){
+			var that=this;
+			document.onmousemove=function(e){
+				var eve=e||window.event;
+				that.cx=eve.clientX;
+				that.cy=eve.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.oy;
+				if(that.left<=0){
+					that.left=0;
+				}
+				if(that.top<=0){
+					that.top=0;
+				}
+				if(that.left>=that.cw-that.ow){
+					that.left=that.cw-that.ow;
+				}
+				if(that.top>=that.ch-that.oh){
+					that.top=that.ch-that.oh;
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+
+			}
+		}
+		up(){
+			document.onmouseup=function(){
+				document.onmousemove=null;
+				document.onmouseup=null;
+			}
+
+		}
+		
+	}
+		var obj=document.querySelector("div");
+		new drag(obj).drag();
+	</script>
+</html>
