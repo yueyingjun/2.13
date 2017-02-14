@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title拖拽</title>
+	<script src="jquery.min.js"></script>
+</head>
+<style>
+	*{
+		margin:0;
+		padding:0;
+	}
+	.box{
+		width:300px;
+		height: 300px;
+		border:1px solid #000;
+	}
+	.xiao{
+		width:100px;
+		height: 100px;
+		background: red;
+		color:#fff;
+		font-size: 30px;
+		text-align: center;
+		line-height: 100px;
+	}
+</style>
+<body>
+	<div class="box">
+		<div class="xiao">走</div>
+	</div>
+</body>
+<script>
+	class tuo{
+		constructor(obj){
+			// this.boxwidth=$(".box").width();
+			// this.boxheight=$(".box").height();
+			// this.xiaowidth=$(".xiao").width();
+			// this.xiaoheight=$(".xiao").height();
+
+			this.obj=obj;
+		// 获取屏幕的宽高
+		this.cw=document.getElementsByClassName("box")[0].style.width;
+		this.ch=document.getElementsByClassName("box")[0].style.height;
+		// this.ch=$(".box").style.height;
+		// 获取自身的宽高
+		this.ow=obj.offsetWidth;
+		this.oh=obj.offsetHeight;
+		// 事件到事件源的距离
+		this.ox=0;
+		this.oy=0;
+		// 事件到浏览器的距离
+		this.cx=0;
+		this.cy=0;
+		// obj的
+		this.left=0;
+		this.top=0;
+		}
+		drag(){
+			this.down();
+		}
+		down(){
+			var that=this;   
+			// this=newobj   this.obj=box
+			this.obj.onmousedown=function(e){ 
+				var ev=e||window.event;
+				that.ox=ev.offsetX;
+				that.oy=ev.offsetY;
+				that.move();
+				that.up();
+			}
+		}
+		move(){
+			var that=this;
+			document.onmousemove=function(e){
+				var ev=e||window.event;
+				// 获取事件到浏览器的x,y
+				that.cx=ev.clientX;
+				that.cy=ev.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.oy;
+				if(that.left<=0){
+					that.left=0;
+				}
+				if(that.top<=0){
+					that.top=0;
+				}
+				if(that.left>=that.cw-that.ow){
+					that.left=that.cw-that.ow;
+				}
+				if(that.top>=that.ch-that.oh){
+					that.top=that.ch-that.oh;
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+			}
+		}
+		up(){
+			this.obj.onmouseup=function(e){
+				document.onmousemove=null;
+				this.obj.onmouseup=null;
+			}
+		}
+	}
+	var obj=$(".xiao");
+	var newobj=new tuo();
+	newobj.drag();
+</script>
+</html>
