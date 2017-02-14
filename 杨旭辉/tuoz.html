@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>拖</title>
+	<script src="function.js"></script>
+</head>
+<script>
+	function Drag(obj){
+		this.obj=obj;
+		this.cw=document.documentElement.clientWidth;
+		this.ch=document.documentElement.clientHeight;
+		this.ow=this.obj.offsetWidth;
+		this.oh=this.obj.offsetHeight;
+		this.ox=0;
+		this.oy=0;
+		this.cx=0;
+		this.cy=0;
+		this.left=0;
+		this.top=0;
+	}
+	Drag.prototype={
+		drag:function(){
+			this.down();
+		},
+		down:function(){
+			var that=this;
+			this.obj.onmousedown=function(e){
+				var ev=e||window.event;
+				that.ox=ev.offsetX;
+				that.oy=ev.offsetY;
+				that.move();
+				that.up();
+			}
+		},
+		move:function(){
+			var that=this;
+			document.onmousemove=function(e){
+				var ev=e||window.event;
+				that.cx=ev.clientX;
+				that.cy=ev.clientY;
+				that.left=that.cx-that.ox;
+				that.top=that.cy-that.oy;
+				if (that.left<=0) {
+					that.left=0;
+				}
+				if (that.left>=that.cw-that.ow) {
+					that.left=that.cw-that.ow;
+				}
+				if (that.top<=0) {
+					that.top=0;
+				}
+				if (that.top>=that.ch-that.oh) {
+					that.top=that.ch-that.oh;
+				}
+				that.obj.style.left=that.left+"px";
+				that.obj.style.top=that.top+"px";
+			}
+		},
+		up:function(){
+			document.onmouseup=function(){
+				document.onmousemove=null;
+				document.onmouseup=null;
+			}
+		},
+	};
+	$(function(){
+		var obj=$("#box");
+		var newobj=new Drag(obj);
+		newobj.drag();
+		var gw=obj.offsetWidth;
+		var gh=obj.offsetHeight;
+	})	
+</script>
+<style>
+*{
+	padding:0;
+	margin:0;
+}
+#box{
+	width:200px;
+	height: 200px;
+	background: red;
+	border: 1px solid black;
+	position: absolute;
+	left:0;
+	top:0;
+}
+</style>
+<body>
+	<div id="box"></div>
+</body>
+</html>
