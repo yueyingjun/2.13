@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script src="jquery.min.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		/*#bigbox{
+			width:90%;
+			height:500px;
+			margin:50px auto;
+			border:2px solid #333;
+			position:relative;
+		}*/
+		#box{
+			width: 200px;
+			height: 200px;
+			background: red;
+			position:fixed;
+			top:0;
+			left:0;
+		}
+		
+	</style>
+	<body>
+			<div id="box"></div>
+
+		
+	</body>
+	<script>
+		class tuozhuai{
+			constructor(){
+//				var bigbox=document.getElementById("bigbox");
+				this.cw=document.documentElement.clientWidth;
+				this.ch=document.documentElement.clientHeight;
+				this.obj=document.getElementById("box");
+				this.ow=this.obj.clientWidth;//box盒子的大小
+				this.oh=this.obj.clientHeight;
+				this.ox=0;
+				this.oy=0;
+				this.cx=0;
+				this.cy=0;
+				this.left=0;
+				this.top=0;
+				this.endx=0;
+				this.endy=0;
+				this.startx=0;
+				this.starty=0;
+				this.lx=0;
+				this.ly=0;
+			}
+			down(){
+//				console.dir(this.obj);
+				var that=this;
+				this.obj.onmousedown=function(e){
+					var e=e||window.event;
+					that.ox=e.offsetX;//距离事件源的距离
+					that.oy=e.offsetY;
+					that.startx=that.ox;
+					that.starty=that.oy;
+					that.move();
+					that.up();
+				}
+			}
+			move(){
+				var that=this;
+				document.onmousemove=function(e){
+					var e=e||window.event;
+					that.cx=e.clientX;//距离浏览器的距离
+					that.cy=e.clientY;
+					that.left=that.cx-that.ox;
+					that.top=that.cy-that.oy;
+					if(that.left<=0){
+						that.left=0;
+					}
+					if(that.top<=0){
+						that.top=0;
+					}
+					if(that.left>=that.cw-that.ow){
+						that.left=that.cw-that.ow;
+					}
+					if(that.top>=that.ch-that.oh){
+						that.top=that.ch-that.oh;
+					}
+					that.obj.style.left=that.left+"px";
+					that.obj.style.top=that.top+"px";
+					
+					that.endx=that.left;
+					that.endy=that.top;
+					
+					that.lx=that.endx-that.startx;
+					that.ly=that.endy-that.starty;
+					
+					that.startx=that.endx;
+					that.starty=that.endy;
+				}	
+			}
+			up(){
+				var that=this;
+				document.onmouseup=function(){
+					var bujin=0.9;
+		     		var t=setInterval(function(){
+		     			that.lx*=bujin;
+		     			that.ly*=bujin;
+		     			
+		                if(Math.abs(that.lx)<=1){
+		                    clearInterval(t)
+		     			}else if(Math.abs(that.ly)<=1){
+		     				clearInterval(t)
+		     			}
+		     			if(that.obj.offsetLeft<=0){
+							that.obj.offsetLeft=0;
+						}
+						if(that.obj.offsetTop<=0){
+							that.obj.offsetTop=0;
+						}
+						if(that.obj.offsetLeft>=that.cw-that.ow){
+							that.obj.offsetLeft=that.cw-that.ow;
+						}
+						if(that.obj.offsetTop>=that.ch-that.oh){
+							that.obj.offsetTop=that.ch-that.oh;
+						}
+						console.log(that.lx)
+						console.log(that.obj.offsetLeft)
+		     			that.obj.style.left=that.lx+that.obj.offsetLeft+"px";
+		     			that.obj.style.top=that.ly+that.obj.offsetTop+"px";
+		     		},100)
+//		     		console.log(that.obj.offsetLeft)
+					document.onmousemove=null;
+					document.onmouseup=null;
+				}
+			}
+		}
+		new tuozhuai().down();
+	</script>
+</html>
