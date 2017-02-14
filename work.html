@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+</head>
+<style>
+	*{
+		margin:0;
+		padding:0;
+		list-style:none;
+	}
+	div{
+		width:200px;height:200px;
+		background: red;
+		position: absolute;
+		top:0;left:0;
+	}
+</style>
+<script>
+	document.addEventListener("DOMContentLoaded",function(){
+		class Drag{
+			constructor(obj){
+				this.obj=obj;
+				this.ow=obj.offsetWidth;
+				this.oh=obj.offsetHeight;
+				this.cw=document.documentElement.clientWidth;
+				this.ch=document.documentElement.clientHeight;
+			}
+		}
+		class person extends Drag{
+			drag(){
+				this.person().down();
+			}
+			down(){
+				var that=this;
+				this.obj.onmousedown=function(e){
+					var ev=e||window.event;
+					that.ox=ev.offsetX;
+					that.oy=ev.offsetY;
+					that.person().move();
+					that.person().up();
+				}
+			}
+			move(){
+				var that=this;
+				this.obj.onmousemove=function(e){
+					var ev=e||window.event;
+					that.cx=ev.clientX;
+					that.cy=ev.clientY;
+					that.left=that.cx-that.ox;
+					that.top=that.cy-that.oy;
+					if(that.left<=0){
+						that.left=0;
+					}
+					if(that.top<=0){
+						that.top=0;
+					}
+					if(that.left>=that.cw-that.ow){
+						that.left=that.cw-that.ow;
+					}
+					if(that.top>=that.ch-that.oh){
+						that.top=that.ch-that.oh;
+					}
+
+					that.obj.style.left=that.left+"px";
+					that.obj.style.top=that.top+"px";
+				}
+			}
+			up(){	
+				this.obj.onmouseup=function(){
+					document.onmousemove=null;
+				}
+			}
+		}
+		var obj=document.querySelector("div");
+		var newobj=new Drag(obj);
+		new person().newobj.drag();	
+	})
+</script>
+<body>
+	<div></div>
+</body>
+</html>
