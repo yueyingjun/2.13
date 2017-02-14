@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+    <style>
+    	*{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		#aa{
+			width: 200px;
+			height: 200px;
+			background: red;
+			border-radius: 60%;
+			box-shadow: 0 0 100px blue;
+			margin: 0 auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			overflow: hidden;
+	
+		}
+		img{
+			width: 200px;
+			height: 200px;
+		}
+    </style>
+	<body>
+		<div id="aa"><img src="1.gif" alt=""></div>
+	</body>
+	
+	<script type="text/javascript">
+		var aa=document.querySelectorAll("#aa")
+		console.log(aa)
+
+		aa.onmousedown=function(e){
+		var ev = e||window.event;
+		// 获取事件对象（鼠标）距离事件源（aa）左上角的距离
+		var ox=ev.offsetX;
+		var oy=ev.offsetY;
+		// 获取屏幕的宽和高
+		var cw=document.documentElement.clientWidth;
+   	    var ch=document.documentElement.clientHeight;
+   	    // 获取事件源（aa）的宽和高
+   	    var width=parseInt(aa.style.width);
+   	    var height=parseInt(aa.style.height);
+		// 把aa转化为document来进行优化
+		document.onmousemove=function(e){
+			var eve = e||window.event;
+			//  获取事件对象（鼠标）距离浏览器左上角的距离
+			var cx=eve.clientX;
+			// console.log(cx)
+		    var cy=eve.clientY;
+			// console.log(cy)
+		    var left=cx-ox;
+		    var top=cy-oy;
+		    // console.log(left)
+		    // console.log(top)
+            if (left<=0) {
+            	left=0;
+            };
+            if (top<=0) {
+            	top=0;
+            };
+            if (left>=cw-width) {
+            	left=cw-width;
+            };
+            if (top>=ch-height) {
+            	top=ch-height;
+            };
+		    aa.style.left=left+"px";
+		    aa.style.top=top+"px";
+		};
+		document.onmouseup=function(){
+			document.onmousemove=null;
+			document.onmousedown=null;
+		};
+	}
+	</script>
+</html>
