@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>拖拽</title>
+		<script src="js/jquery.min.js"></script>
+		<style>
+			.tz{
+				width: 100px;
+				height: 100px;
+				background: red;
+				position: absolute;
+				left: 0;
+				top:0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tz"></div>
+	</body>
+	<script>
+		class TZ{
+			constructor(){
+				var obj=document.querySelector(".tz");
+				var ch=document.documentElement.clientHeight;//浏览器的可见内容的高度
+				var cw=document.documentElement.clientWidth;
+				var divw=obj.width();//盒子的宽
+				var divh=obj.height();//盒子的高
+				var startx=0;//盒子距浏览器左边开始的距离
+				var starty=0;
+				var endx=0;//盒子运动结束距离浏览器左边的距离
+				var endy=0;
+				that.lenx=0;
+				that.leny=0;
+				var xishu=0.5;
+				
+			}
+			down(){
+				that=this;
+				document.onmousedown=function(e){
+					alert(1);
+					var e=e||window.event;
+					var ol=e.offsetLeft;//事件对象距父容器左边的距离
+					var oh=e.offsetTop;
+					var cx=e.clientX;//事件对象距浏览器左边的距离
+					var cy=e.clientY;
+					that.move();
+					that.press();
+				}
+			}
+			move(){
+				that=this;
+				that.obj.onmouseover=function(e){
+					var e=e||window.event;
+					that.down();
+					var eh=cy-oh;
+					var el=cx-ol;
+					if(eh>=ch-divh){
+						eh=ch-divh;
+					}
+					if(eh<0){
+						eh=0;
+					}
+					if(el<0){
+						el=0;
+					}
+					if(el>cw-divw){
+						el=cw-divw;
+					}
+					that.obj.style.left=el+"px";
+					that.obj.style.top=eh="px";
+					that.endx=eh;
+					that.endy=el;
+					that.lenx=that.endx-that.startx;
+					that.leny=that.endy-that.starty;
+					that.startx=that.endx;
+					that.starty=that.endy;
+					that.press();
+				}
+			}
+			press(){
+				var that=this
+				document.onmouseup=function(){
+	     		that.xishu=0.9;
+	     		var t=setInterval(function(){
+	     			that.lenx*=that.xishu;
+	     			that.leny*=that.xishu;
+	     			if(Math.abs(that.lenx)>=Math.abs(that.leny)){
+	                    if(Math.abs(that.lenx)<=1){
+	                    	clearInterval(t)
+	                    }
+	     			}else if(Math.abs(that.leny)<=1){
+	     				clearInterval(t)
+	     			}
+	     			console.log(that)
+	     			that.obj.style.left=that.lenx+that.obj.offsetLeft+"px";
+	     			that.obj.style.top=that.leny+that.obj.offsetTop+"px";
+	     		},60)
+	     		document.onmousemove=null;
+	     		document.onmouseup=null;
+				
+			}
+		}
+		var tz=new TZ();
+		tz.down();
+	</script>
+</html>
