@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+		}
+		.box{
+			width: 100px;
+			height: 100px;
+			background: pink;
+			position: absolute;
+			top:0;
+			left: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+	</div>
+</body>
+<script>
+class Drag{
+	constructor(obj){
+		this.obj=obj;
+		this.ch=document.documentElement.clientHeight;
+		this.cw=document.documentElement.clientWidth;
+		this.ow=this.obj.clientWidth;
+		this.oh=this.obj.clientHeight;
+		this.ox=0;
+		this.oy=0;
+		this.cx=0;
+		this.cy=0;
+		this.left=0;
+		this.top=0;
+	}
+	drag(){
+		this.down();
+	}
+	down(){
+		var that=this;
+		that.obj.onmousedown=function(e){
+			var e=e||window.event;
+			that.ox=e.offsetX;
+			that.oy=e.offsetY;
+			that.move();
+			that.out();
+		}
+	}
+	move(){
+		var that=this;
+		document.onmousemove=function(e){
+                var eve=e||window.event;                
+                that.cx=eve.clientX;
+                that.cy=eve.clientY;
+                that.left=that.cx-that.ox;
+                that.top=that.cy-that.oy;
+                if(that.left<=0){
+                    that.left=0;
+                }
+                if(that.left>that.cw-that.ow){
+                    that.left=that.cw-that.ow;
+                }
+                if(that.top<=0){
+                    that.top=0;
+                }
+                if(that.top>that.ch-that.oh){
+                    that.top=that.ch-that.oh;
+                }
+                that.obj.style.left=that.left+"px";
+                that.obj.style.top=that.top+"px";
+            }
+	}
+	out(){
+		var that=this;
+		document.onmouseup=function(){//抬起时，
+			var endx,endy,lenx,leny,startx,starty;
+			startx=that.ox;
+            starty=that.oy;
+            endx=that.left;
+            endy=that.top;
+            lenx=endx-startx;
+            leny=endy-starty;
+            startx=endx;
+ 			starty=endy;
+			var xishu=0.9;
+		    var t=setInterval(function(){
+		    	lenx*=xishu;
+		    	leny*=xishu;
+		    	if (Math.abs(lenx)>=Math.abs(leny)) {//x轴移动大一点，就按照x轴走，若等于，按照x轴走
+		    		if (Math.abs(lenx)<=1) {
+		    			clearInterval(t);
+		    		}	
+		    	}else{
+		    		if (Math.abs(leny)<=1) {
+		    			clearInterval(t);
+		    		}
+		    	}
+		    	var x=lenx+that.obj.offsetLeft;
+		    	var y=leny+that.obj.offsetTop;
+		    	if(x<=0){
+                    x=0;
+                }
+                if(x>that.cw-that.ow){
+                    x=that.cw-that.ow;
+                }
+                if(y<=0){
+                    y=0;
+                }
+                if(y>that.ch-that.oh){
+                    y=that.ch-that.oh;
+                } 		
+	           that.obj.style.left=x+"px";
+	           that.obj.style.top=y+"px";
+	    },60)
+            document.onmousemove=null;
+            document.onmouseup=null;
+        }
+	}
+}
+var obj=document.querySelector('div');
+new Drag(obj).drag();
+
+
+</script>
+</html>
