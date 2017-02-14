@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			position: relative;
+			margin: 0;
+		}
+		.dian{
+			position: absolute;
+			background: green;
+			width: 5px;
+			height: 5px;
+		}
+		#box{
+			width: 50px;
+			height:50px;
+			background: red;
+			position:absolute;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		function game(obj){
+			this.obj=obj;
+			this.ox=0;
+			this.oy=0;
+			this.cx=0;
+			this.cy=0;
+			this.x=0;
+			this.y=0;
+			this.ow=obj.offsetWidth;
+			this.oh=obj.offsetHeight;
+			this.dw=document.documentElement.clientWidth;
+			this.dh=document.documentElement.clientHeight;
+		}
+		game.prototype={
+			play:function(){
+				this.down();
+			
+
+			},
+			down:function(){
+				var that=this;
+				this.obj.onmousedown=function(e){
+					var ev=e||window.event;
+					that.ox=ev.offsetX;
+					that.oy=ev.offsetY;
+					that.move();
+					that.up();
+					
+				}
+			},
+			move:function(){
+				var that=this;
+				document.onmousemove=function(e){
+					console.log(3)
+					var ev=e||window.event;
+					
+					that.cx=ev.clientX;
+					that.cy=ev.clientY;
+					that.x=that.cx-that.ox;
+					that.y=that.cy-that.ox;
+					if (that.x<0) {
+						that.x=0;
+					}
+					if (that.y<0) {
+						that.y=0;
+					}
+					if (that.x>that.dw-that.ow) {
+						that.x=that.dw-that.ow;
+					}
+					if (that.y>that.dh-that.oh) {
+						that.y=that.dh-that.oh;
+					}
+
+					that.obj.style.left=that.x+"px";
+					that.obj.style.top=that.y+"px";
+				}
+			},
+			up:function(){
+				document.onmouseup=function(){
+					document.onmousemove=null;
+				}
+				
+			}
+		}
+		var aa=new game(box);
+		aa.play();
+	</script>
+		
+</body>
+</html>
