@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<style>
+*{
+	padding: 0;
+	margin:0;
+}
+	.big{
+		width: 1300px;
+		height: 600px;
+		background: #f4e4cd;
+		margin:0 auto;
+	}
+	.small{
+		width: 50px;
+		height: 50px;
+		background: #eee;
+		border:10px solid #999;
+	}
+</style>
+<body>
+	<div class="small"></div>
+</body>
+<script>
+    class Drag{
+    	constructor(box){
+    		this.box=box;
+	        this.cw=document.documentElement.clientWidth;//浏览器宽
+	        this.ch=document.documentElement.clientHeight;//浏览器高
+	        this.ow=this.box.offsetWidth;//盒子实际宽
+	        this.oh=this.box.offsetHeight;//盒子实际高
+	        this.cx=0;
+	        this.cy=0;
+	        this.ox=0;
+	        this.ox=0;
+	        this.left=0;
+	        this.top=0;
+	        this.startX=0;
+	        this.startY=0;
+	        this.endX=0;
+	        this.endY=0;
+	        this.lenX=0;
+	        this.lenY=0;
+	        this.xishu=0.95;
+	        this.t=0;
+	        this.x1=0;
+	        this.y1=0;
+    	}
+        drag(){
+            this.down();
+        }
+        down(){
+            var that=this;
+            this.box.onmousedown=function(e){
+                var eve=e||window.event;
+                //阻止浏览器默认行为的方法
+	            if(eve.preventDefault){
+	                eve.preventDefault();
+	            }else{
+	                eve.returnValue=false;
+	            }
+                that.ox=eve.offsetX;//鼠标相对于盒子左侧距离
+                that.oy=eve.offsetY;//鼠标相对于盒子顶部距离
+                //缓冲开始
+                that.startX=that.ox;
+            	that.startY=that.oy;
+                that.move();
+                that.up();
+            } 
+        }
+        move(){
+            var that=this;
+            document.onmousemove=function(e){
+                var eve=e||window.event;
+                //阻止浏览器默认行为的方法
+	            if(eve.preventDefault){
+	                eve.preventDefault();
+	            }else{
+	                eve.returnValue=false;
+	            }
+                that.cx=eve.clientX;//鼠标相对于浏览器左侧距离
+                that.cy=eve.clientY;//鼠标相对于浏览器顶部距离
+                that.left=that.cx-that.ox;//盒子横向移动距离
+                that.top=that.cy-that.oy;//盒子纵向移动距离
+                //边界判断
+                if(that.left>=that.cw-that.ow){
+                	that.left=that.cw-that.ow;
+                }
+                if(that.left<=0){
+                	that.left=0;
+                }
+                if(that.top>=that.ch-that.oh){
+                	that.top=that.ch-that.oh;
+                }
+                if(that.top<=0){
+                	that.top=0;
+                }
+                // 设置margin值使它动起来
+                that.box.style.marginLeft=that.left+"px";
+                that.box.style.marginTop=that.top+"px";
+                //缓冲距离
+                that.endX=that.left;
+                that.endY=that.top;
+                that.lenX=that.endX-that.startX;
+                that.lenY=that.endY-that.startY;
+                that.startX=that.endX;
+                that.startY=that.endY;
+            }
+        }
+        up(){
+        	var that=this;
+            document.onmouseup=function(){
+            	//缓冲
+                	that.t=setInterval(hc,60);
+                	var that2=that;
+	                function hc(){
+	                    that2.lenX*=that2.xishu;
+	                    that2.lenY*=that2.xishu;
+	                    if(Math.abs(that2.lenX)>=Math.abs(that2.lenY)){
+	                        if(Math.abs(that2.lenX)<=1){
+	                            clearInterval(that2.t);
+	                        }else if(Math.abs(that2.lenY)<=1){
+	                            clearInterval(that2.t);
+	                        }
+	                    }
+	                    that2.x1=that2.lenX+that2.box.offsetLeft;
+	                    that2.y1=that2.lenY+that2.box.offsetTop;
+	                    if(that2.x1<=0){that2.x1=0}
+	                    if(that2.x1>=that2.cw-that2.ow){that2.x1=that2.cw-that2.ow}
+	                    if(that2.y1<=0){that2.y1=0}
+	                    if(that2.y1>=that2.ch-that2.oh){that2.y1=that2.ch-that2.oh}
+	                    that2.box.style.marginLeft=that2.x1+"px";
+	                    that2.box.style.marginTop=that2.y1+"px";
+	                }
+                //清除事件
+                document.onmousemove=null;
+                document.onmouseup=null;
+            }
+        }
+    }
+    var box=document.getElementsByClassName("small")[0]
+    new Drag(box).drag();
+
+/**********************************/
+// es6之后
+	// class aa{
+	// 	constructor(){
+	// 		console.log("123")
+	// 	}
+	// 	asd(){
+
+	// 	}
+	// }
+	// class stu extends person{
+	// 	constructor(){
+	// 		super()
+	// 	}
+	// }
+	// // new aa()
+
+</script>
+</html>
