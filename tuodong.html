@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="jquery.min.js"></script>
+	</head>
+<style>
+	
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;	
+}
+
+.kuang{
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+	background-color: plum;
+	cursor: pointer;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+	
+</style>
+	<body>
+		
+<div class="kuang"></div>
+		
+	</body>
+</html>
+<script>
+
+	
+class tuozhuai{
+	constructor(){
+        this.obj=$(".kuang")
+        this.ot=this.obj.offset().top
+        this.ol=this.obj.offset().left
+        this.oh=this.obj.height()
+        this.ow=this.obj.width()
+        this.st=document.documentElement.clientHeight
+        this.sw=document.documentElement.clientWidth
+        this.mt=0
+        this.ml=0
+        this.tjuli=0
+        this.ljuli=0
+        this.an=0
+        this.num=10
+        this.xishu=0.2
+	}
+	dong(){
+		this.move()
+		this.way()
+	}
+	move(){
+		var that=this
+		this.obj.hover(function(){
+			$(this).on("mousedown",function(e){
+				var ev=e||window.event
+				that.mt=ev.offsetY
+				that.ml=ev.offsetX
+				that.ot=that.obj.offset().top
+                that.ol=that.obj.offset().left
+				$(this).on("mousemove",function(e){
+					var ev=e||window.event
+				    that.tjuli=ev.clientY-that.mt
+				    that.ljuli=ev.clientX-that.ml
+				    if(that.tjuli+that.oh>=that.st){that.tjuli=that.st-that.oh}else if(that.tjuli<=0){that.tjuli=0}
+				    if(that.ljuli+that.ow>=that.sw){that.ljuli=that.sw-that.ow}else if(that.ljuli<=0){that.ljuli=0}
+				    $(this).offset({top:that.tjuli,left:that.ljuli})
+				})
+				
+			})
+			$(this).on("mouseup",function(){
+				that.anm()
+				$(this).off("mousemove")
+			})
+		},function(){
+			$(this).off("mousemove")
+			$(this).off("mousedown")
+		})
+	}
+	way(){
+		var that=this
+		$(document).on("keydown",function(e){
+			var ev=e||window.event
+			that.an=ev.keyCode
+			switch(that.an){
+				case 37:$(".kuang").offset({left:that.ljuli-=that.num});break;
+				case 38:$(".kuang").offset({top:that.tjuli-=that.num});break;
+				case 39:$(".kuang").offset({left:that.ljuli+=that.num});break;
+				case 40:$(".kuang").offset({top:that.tjuli+=that.num});break;
+			}
+			if(that.tjuli+that.oh>=that.st){$(".kuang").offset({top:that.st-that.oh});that.tjuli=that.st-that.oh}else if(that.tjuli<=0){$(".kuang").offset({top:0});that.tjuli=0}
+			if(that.ljuli+that.ow>=that.sw){$(".kuang").offset({left:that.sw-that.ow});that.ljuli=that.sw-that.ow}else if(that.ljuli<=0){$(".kuang").offset({left:0});that.ljuli=0}			
+		})
+	}
+	anm(){
+		var that=this
+		var y=this.tjuli-this.ot
+		var x=this.ljuli-this.ol
+		y*=this.xishu
+		y+=that.tjuli+y
+		x*=this.xishu
+		x+=that.ljuli+x
+		if(y+this.oh>=this.st){y=this.st-this.oh;that.tjuli=that.st-that.oh}else if(y<=0){y=0;that.tjuli=0}
+		if(x+this.ow>=this.sw){x=this.sw-this.ow;that.ljuli=that.sw-that.ow}else if(x<=0){x=0;that.ljuli=0}
+		$(".kuang").animate({top:y,left:x},function(){
+			$(".kuang").clearQueue()
+			that.tjuli=$(".kuang").offset().top
+			that.ljuli=$(".kuang").offset().left
+		})
+	}
+}
+
+dong=new tuozhuai()
+dong.dong()
+//console.log(new tuozhuai().tnum)
+
+
+
+//class tuozhuai{
+//	constructor(){
+//      this.t1=0;
+//      this.obj=$(".kuang")
+//      this.ot=this.obj.offset().top
+//      this.ol=this.obj.offset().left
+//      this.tnum=0
+//      this.lnum=0
+//	}
+//	dong(){
+//		var that=this
+//		this.t1=setInterval(function(){
+//			that.move()
+//		},1000)
+//		this.t1=setInterval(this.move,1000)
+//	}
+//	move(){
+//		console.log(this.tnum)
+//		this.tnum+=10
+//	}
+//}
+//
+//dong=new tuozhuai
+//dong.dong()
+
+
+
+</script>
