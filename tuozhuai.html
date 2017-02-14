@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		*{
+			margin:0;
+			padding: 0;
+			list-style: none;
+		}
+		.box{
+			width: 200px;
+			height: 200px;
+			background: yellowgreen;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			var box=document.getElementsByClassName("box")[0];
+			class drag{
+				constructor(obj){
+					this.obj=obj;
+					this.ow=this.obj.offsetWidth;
+					this.oh=this.obj.offsetHeight;
+					this.ch=document.documentElement.clientHeight;
+					this.cw=document.documentElement.clientWidth;	
+					this.cx=0;
+					this.cy=0;
+					this.ox=0;
+					this.oy=0;
+				}
+				drags(){
+					resize();
+					down();
+				}
+				down(){
+					var that=this;
+					this.obj.onmousedown=function(e){
+						var e=e||window.event;
+						that.ox=e.offsetX;
+						that.oy=e.offsetY;
+						that.move();
+						that.up();
+					}
+				}
+				move(){
+					var that=this;
+					document.onmousemove=function(){
+						var e=e||window.event;
+						that.cx=e.clientX;
+						that.cy=e.clientY;
+						var x=that.cx-that.ox;
+						var y=that.cy-that.oy;
+						var w=that.cw-that.ow;
+						var h=that.ch-that.oh;
+						if(x<=0){
+							x=0;
+						}
+						if(y<=0){
+							y=0;
+						}
+						if(x>w){
+							x=w;
+						}
+						if(y>h){
+							y=h;
+						}
+						that.obj.style.left=x+"px";
+						that.obj.style.top=y+"px";
+					}
+				}
+				up(){
+					document.onmouseup=function(){
+							document.onmousedown=null;
+							document.onmousemove=null;
+					}
+				}
+				resize(){
+					var that=this;
+					window.onresize=function(e){
+						that.cw=document.documentElement.clientWidth;
+						that.ch=document.documentElement.clientHeight;
+						var e=e||window.event;
+						that.cx=e.clientX;
+						that.cy=e.clientY;
+						that.ox=e.offsetX;
+						that.oy=e.offsetY;	
+						var aa=that.cx-that.ox;
+						var bb=that.cy-that.oy;
+						if (aa>that.cw-that.ow) {aa=that.cw-that.ow};
+						if (bb>that.ch-that.oh) {bb=that.ch-that.oh};
+						that.obj.style.left=aa+"px";
+						that.obj.style.top=bb+"px";
+					}
+				}
+				
+			}
+			new drag(box).drags();
+			
+		}
+	</script>
+	<body>
+		<div class="box">
+			
+		</div>
+	</body>
+</html>
